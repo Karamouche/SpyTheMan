@@ -8,10 +8,9 @@ Small algorithme to get if a mask is wear or not
 
 import cv2
 
-
 def hasMask(rec):
     face = cv2.CascadeClassifier('cascades/frontalface_alt.xml')
-    mouth = cv2.CascadeClassifier("cascades/mouth.xml")
+    mouth = cv2.CascadeClassifier('cascades/Mouth.xml')
     grayRec = cv2.cvtColor(rec, cv2.COLOR_BGR2GRAY)
     faces = face.detectMultiScale(grayRec, 1.1, 4)
     mouths = mouth.detectMultiScale(grayRec, 1.1, 4)
