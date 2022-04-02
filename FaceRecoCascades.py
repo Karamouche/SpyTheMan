@@ -15,7 +15,7 @@ def hasMask(rec):
     else, nothing
     """
     face = cv2.CascadeClassifier('cascades/frontalface_alt.xml')
-    mouth = cv2.CascadeClassifier('cascades/mouth.xml')
+    mouth = cv2.CascadeClassifier('cascades/mouth_alt.xml')
     grayRec = cv2.cvtColor(rec, cv2.COLOR_BGR2GRAY)
     faces = face.detectMultiScale(grayRec, 1.1, 4)
     mouths = mouth.detectMultiScale(grayRec, 1.1, 10)
@@ -24,7 +24,7 @@ def hasMask(rec):
         cv2.rectangle(rec, (x, y), (x+w, y+h), (255, 0, 0), 2)
     for (x, y, w, h) in mouths:
         cv2.rectangle(rec, (x, y), (x+w, y+h), (0, 255, 0), 2)
-    if len(mouths) <= 3: //MOUTH INSIDE FACE
+    if len(mouths) <= 3: #MOUTH INSIDE FACE
         cv2.putText(rec, "MASK", (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
     if faces != ():
         cv2.putText(rec, "NO FACE", (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
