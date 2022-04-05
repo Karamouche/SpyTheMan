@@ -1,31 +1,29 @@
-#define servo1 2
-//#define servo2
-//#define servo3
-//#define borneIN1
-//#define borneIN2
-//#define borneIN3
-//#define borneIN4
-//#define borneENA
-//#define borneENB
+#define servo1 10
+#define servo2 11
+#define servo3 12
+#define borneIN1 2
+#define borneIN2 3
+#define borneIN3 4
+#define borneIN4 5
+
 
 int poservo1 = 80;
-//int poservo2 = 40;
-//int poservo3 = 180;
+int poservo2 = 40;
+int poservo3 = 180;
 
 #include <Servo.h>
-Servo Servo1;//Servo  Horizontal
-//Servo Servo2; //Servo Vertical
-//Servo Servo3; //Servo chargeur
+Servo Serv1;//Servo  Horizontal
+Servo Serv2; //Servo Vertical
+Servo Serv3; //Servo chargeur
 
 void setup() {
 	Serial.begin(9600);
-	Servo1.attach(servo1); Servo1.write(poservo1);
-	//Servo2.attach(servo2); Servo2.write(poservo2);
-	//Servo3.attach(servo3); Servo3.write(poservo3);
+	Serv1.attach(servo1); Serv1.write(poservo1);
+	Serv2.attach(servo2); Serv2.write(poservo2);
+	Serv3.attach(servo3); Serv3.write(poservo3);
 	delay(10);
-//	pinMode(borneIN1, OUTPUT); pinMode(borneIN2, OUTPUT); //Moteur 1
-//	pinMode(borneIN3, OUTPUT); pinMode(borneIN4, OUTPUT); //Moteur 2
-//	pinMode(borneENA, OUTPUT); pinMode(borneENB, OUTPUT);
+	pinMode(borneIN1, OUTPUT); pinMode(borneIN2, OUTPUT); //Moteur 1
+	pinMode(borneIN3, OUTPUT); pinMode(borneIN4, OUTPUT); //Moteur 2
 	}
 void loop(){
 	if (Serial.available(){
@@ -38,8 +36,6 @@ void loop(){
 			digitalWrite(borneIN2, LOW);
 			digitalWrite(borneIN3, LOW);
 			digitalWrite(borneIN4, HIGH);
-			analogWrite(borneENA, 250);
-			analogWrite(borneENB, 250); //On allume les moteurs
 			delay(10) //On attend que les moteurs soit à  la bonne vitesse
 			servo3.write(280); //On envoie la munition
 			break;
@@ -66,4 +62,3 @@ void loop(){
 		default: // cas par défaut, si le programme principal n'envoie rien on arrive ici
 			break;
 		}
-
