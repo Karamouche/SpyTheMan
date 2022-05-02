@@ -15,24 +15,37 @@ def hasMask(rec):
     else, nothing
     """
     face = cv2.CascadeClassifier('cascades/frontalface_alt.xml')
-    #mouth = cv2.CascadeClassifier('cascades/mouth_alt.xml')
+    mouth = cv2.CascadeClassifier('cascades/mouth2.xml')
     grayRec = cv2.cvtColor(rec, cv2.COLOR_BGR2GRAY)
     faces = face.detectMultiScale(grayRec, 1.1, 5, minSize=(30,30), flags=cv2.CASCADE_SCALE_IMAGE)
-    #mouths = mouth.detectMultiScale(grayRec, 1.1, 4)
+    mouths = mouth.detectMultiScale(grayRec, 3, 5, minSize=(30,30), flags=cv2.CASCADE_SCALE_IMAGE)
     for (x, y, w, h) in faces:
         cv2.rectangle(rec, (x, y), (x+w, y+h), (255, 0, 0), 2)
-    """
     for (x, y, w, h) in mouths:
         cv2.rectangle(rec, (x, y), (x+w, y+h), (0, 255, 0), 2)
-    if len(mouths) <= 3: #MOUTH INSIDE FACE
-        cv2.putText(rec, "MASK", (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
-    elif faces != ():
-        cv2.putText(rec, "NO FACE", (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
-    else:
-        cv2.putText(rec, "Error", (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2, cv2.LINE_AA)
-    """
+    nbMask = 0
+    nbNotMask = 0
+    if len(faces) >= 1:
+        for fac in faces:
+            if(inside(fac, mouths)):
+                nbNotMask += 1
+            else:
+                nbMask += 1
+    cv2.putText(rec, "Nb mask : "+str(nbMask), (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
+    cv2.putText(rec, "Nb pas mask : "+str(nbNotMask), (30, 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
     return rec
     
+def inside(face, mouths):
+    fx = face[0]
+    fy = face[1]
+    fw = face[2]
+    fh = face[3]
+    for mouth in mouths:
+        Mx = mouth[0]
+        My = mouth[1]
+        if Mx < fx + fw and My < fy + fh:
+            return True
+    return False
 
 cam = cv2.VideoCapture(0)
 succes, rec = cam.read()
