@@ -1,4 +1,4 @@
-#define servo1 2
+//#define servo1 2
 //#define servo2
 //#define servo3
 //#define borneIN1
