@@ -28,10 +28,11 @@ void setup() {
 //	pinMode(borneENA, OUTPUT); pinMode(borneENB, OUTPUT);
 	}
 void loop(){
-	if (Serial.available(){
+	if (Serial.available()){
 		byte nr = Serial.read();
 		Serial.print("Syst send:");
 		Serial.println(nr, DEC);
+		}
 	switch (nr){
 		case shoot://Le  programme a déjà aligné le système et la cible et ordonne de tirer
 			digitalWrite(borneIN1, HIGH);
@@ -65,5 +66,6 @@ void loop(){
 			break;
 		default: // cas par défaut, si le programme principal n'envoie rien on arrive ici
 			break;
-		}
+	}
+}
 
