@@ -1,5 +1,5 @@
 import serial 
-channel = serial.Serial('dev/ttyX',9600) #Complete le port serial ls /dev/tty*
+channel = serial.Serial('dev/ttyACM0',9600) #Complete le port serial ls /dev/tty*
 options = ['shoot','up','down','right','left']
 while True:
     message = input("Choose between : shoot/up/down/right/left")
