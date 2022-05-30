@@ -7,34 +7,48 @@ Small algorithme to get if a mask is wear or not
 """
 
 import cv2
+import serial 
+#channel = serial.Serial('dev/ttyACM0',9600) #Complete le port serial ls /dev/tty*
+options = ['0','1','2','3','4']
+#"shoot : 0/up : 1/down : 2/right : 3/left : 4"
 
-def hasMask(rec):
+def shoot(rec):
     """
     If a face is detect, and the mouth inside of it, there is no mask -> shoot
-    If a face is detect, possibility to wear a mask
-    else, nothing
     """
     face = cv2.CascadeClassifier('cascades/frontalface_alt.xml')
     mouth = cv2.CascadeClassifier('cascades/mouth2.xml')
     grayRec = cv2.cvtColor(rec, cv2.COLOR_BGR2GRAY)
+    center = (int(rec.shape[1]/2), int(rec.shape[0]/2))
     faces = face.detectMultiScale(grayRec, 1.1, 5, minSize=(30,30), flags=cv2.CASCADE_SCALE_IMAGE)
     mouths = mouth.detectMultiScale(grayRec, 3, 5, minSize=(30,30), flags=cv2.CASCADE_SCALE_IMAGE)
-    for (x, y, w, h) in faces:
-        cv2.rectangle(rec, (x, y), (x+w, y+h), (255, 0, 0), 2)
-    for (x, y, w, h) in mouths:
-        cv2.rectangle(rec, (x, y), (x+w, y+h), (0, 255, 0), 2)
     nbMask = 0
     nbNotMask = 0
+    facesToShoot = []
     if len(faces) >= 1:
         for fac in faces:
             if(inside(fac, mouths)):
                 nbNotMask += 1
+                facesToShoot.append(fac)
             else:
                 nbMask += 1
-    cv2.putText(rec, "Nb mask : "+str(nbMask), (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
-    cv2.putText(rec, "Nb pas mask : "+str(nbNotMask), (30, 80), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+    points = [] #liste des points à viser
+    for element in facesToShoot:
+        points.append( (int(element[0]+element[2]/2), int(element[1]+element[3]/2)) )
+    if len(points) >= 1:
+        cv2.circle(rec, points[0], 10, (0, 0, 255), 4)
+    cv2.circle(rec, center, 10, (255, 0, 255), 4)
+    deplacement = None
+    if len(points)>=1:
+        deplacement = (points[0][0]-center[0], points[0][1]-center[1])
+        print(deplacement)
+    if deplacement != None:
+        if(deplacement[0] < 30 and deplacement[0] > -30 and
+           deplacement[1] < 30 and deplacement[1] > -30):
+            print("shoot")
+            #channel.write("0") #shoot
     return rec
-    
+
 def inside(face, mouths):
     fx = face[0]
     fy = face[1]
@@ -50,15 +64,13 @@ def inside(face, mouths):
 cam = cv2.VideoCapture(0)
 succes, rec = cam.read()
 rec = cv2.flip(rec, 1)
-rec = cv2.resize(rec, (1280, 720))
 if not cam.isOpened():
     print("Error initializing camera")
 
 while cam.isOpened():
-    cv2.imshow("SpyTheMan", hasMask(rec))
+    cv2.imshow("SpyTheMan", shoot(rec))
     succes, rec = cam.read()
     rec = cv2.flip(rec, 1)
-    rec = cv2.resize(rec, (1280, 720))
     if cv2.waitKey(1) == 27:
         break
     
