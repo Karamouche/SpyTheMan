@@ -9,8 +9,8 @@ Small algorithme to get if a mask is wear or not
 import cv2
 import serial 
 #channel = serial.Serial('dev/ttyACM0',9600) #Complete le port serial ls /dev/tty*
-options = ['0','1','2','3','4']
-#"shoot : 0/up : 1/down : 2/right : 3/left : 4"
+options = ['1','2','3','4', '5']
+# shoot : 1 / up :2 / down : 3 / left : 4 / right : 5
 
 def shoot(rec):
     """
@@ -46,7 +46,7 @@ def shoot(rec):
         if(deplacement[0] < 30 and deplacement[0] > -30 and
            deplacement[1] < 30 and deplacement[1] > -30):
             print("shoot")
-            #channel.write("0") #shoot
+            #channel.write("1") #shoot
     return rec
 
 def inside(face, mouths):
