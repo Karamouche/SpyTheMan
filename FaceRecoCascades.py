@@ -8,9 +8,14 @@ Small algorithme to get if a mask is wear or not
 
 import cv2
 import serial 
-#channel = serial.Serial('dev/ttyACM0',9600) #Complete le port serial ls /dev/tty*
+channel = serial.Serial('COM4',9600) #Complete le port serial ls /dev/tty*
 options = ['1','2','3','4', '5']
 # shoot : 1 / up :2 / down : 3 / left : 4 / right : 5
+"""
+liste = ['2', '2', '2', '2', '2', '4', '4', '4', '4', '4']
+for element in liste:
+    channel.write(element.encode())
+"""
 
 def shoot(rec):
     """
@@ -46,7 +51,7 @@ def shoot(rec):
         if(deplacement[0] < 30 and deplacement[0] > -30 and
            deplacement[1] < 30 and deplacement[1] > -30):
             print("shoot")
-            #channel.write("1") #shoot
+            channel.write('1'.encode()) #shoot
     return rec
 
 def inside(face, mouths):
@@ -75,4 +80,5 @@ while cam.isOpened():
         break
     
 cv2.destroyWindow("SpyTheMan")
+channel.close()
 cam.release()
