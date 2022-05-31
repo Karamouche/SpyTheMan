@@ -6,6 +6,7 @@
 #define borneIN2 3
 #define borneIN3 4
 #define borneIN4 5
+#define dep 2
 
 
 int poservoT = 0;
@@ -39,7 +40,7 @@ void loop(){
 			digitalWrite(borneIN3, LOW);
 			digitalWrite(borneIN4, HIGH);
 			delay(400); //On attend que les moteurs soit à  la bonne vitesse
-			ServT.write(180); //On envoie la munition 180 = 
+			ServT.write(-180); //On envoie la munition 180 = 
       delay(250);
       ServT.write(0);
       delay(600);
@@ -54,30 +55,30 @@ void loop(){
       digitalWrite(borneIN4, LOW);  
 			break;
 		case 50: // Le programme ordonne de monter
-      if(poservoV <= 170){
-			poservoV = poservoV+10;
+      if(poservoV <= 180-dep){
+			poservoV = poservoV+dep;
       delay(50);
       ServV.write(poservoV);
       }
 			break;
 		case 51: // Le programme ordonne de descendre
-      if(poservoV >= 10){
-      poservoV = poservoV-10;
+      if(poservoV >= dep){
+      poservoV = poservoV-dep;
 			delay(50);
      ServV.write(poservoV);
       }
 			break;
 		case 52: // Le programme ordonne d'orienter vers la droite
-      if(poservoH <= 170){
-			poservoH = poservoH+10;
+      if(poservoH <= 180-dep){
+			poservoH = poservoH+dep;
       delay(50);
       ServH.write(poservoH);
       }
 			break;
       
 		case 53: // Le programme ordonne d'orienter vers la gauche
-      if(poservoH >= 10){
-      poservoH = poservoH-10;
+      if(poservoH >= dep){
+      poservoH = poservoH-dep;
       delay(50);
       ServH.write(poservoH);
       }

@@ -8,14 +8,10 @@ Small algorithme to get if a mask is wear or not
 
 import cv2
 import serial 
+import time
 channel = serial.Serial('COM4',9600) #Complete le port serial ls /dev/tty*
 options = ['1','2','3','4', '5']
-# shoot : 1 / up :2 / down : 3 / left : 4 / right : 5
-"""
-liste = ['2', '2', '2', '2', '2', '4', '4', '4', '4', '4']
-for element in liste:
-    channel.write(element.encode())
-"""
+hasShoot = False
 
 def shoot(rec):
     """
@@ -23,6 +19,8 @@ def shoot(rec):
     """
     face = cv2.CascadeClassifier('cascades/frontalface_alt.xml')
     mouth = cv2.CascadeClassifier('cascades/mouth2.xml')
+    global hasShoot
+    APROX = 20
     grayRec = cv2.cvtColor(rec, cv2.COLOR_BGR2GRAY)
     center = (int(rec.shape[1]/2), int(rec.shape[0]/2))
     faces = face.detectMultiScale(grayRec, 1.1, 5, minSize=(30,30), flags=cv2.CASCADE_SCALE_IMAGE)
@@ -46,12 +44,23 @@ def shoot(rec):
     deplacement = None
     if len(points)>=1:
         deplacement = (points[0][0]-center[0], points[0][1]-center[1])
-        print(deplacement)
-    if deplacement != None:
-        if(deplacement[0] < 30 and deplacement[0] > -30 and
-           deplacement[1] < 30 and deplacement[1] > -30):
-            print("shoot")
+        #print(deplacement)
+    if deplacement != None and not hasShoot:
+        if(deplacement[0] < APROX and deplacement[0] > -APROX and
+           deplacement[1] < APROX and deplacement[1] > -APROX):
             channel.write('1'.encode()) #shoot
+            time.sleep(0.3)
+            hasShoot = True
+        if(deplacement[0] > APROX):
+            channel.write('4'.encode())
+        if(deplacement[0] < -APROX):
+            channel.write('5'.encode())
+        if(deplacement[1] > APROX):
+            channel.write('3'.encode())
+        if(deplacement[1] < -APROX):
+            channel.write('2'.encode())
+    else:
+        channel.write('0'.encode())
     return rec
 
 def inside(face, mouths):
@@ -74,7 +83,11 @@ if not cam.isOpened():
 
 while cam.isOpened():
     cv2.imshow("SpyTheMan", shoot(rec))
+    #shoot(rec)
     succes, rec = cam.read()
+    if hasShoot:
+        time.sleep(1)
+        hasShoot = False
     rec = cv2.flip(rec, 1)
     if cv2.waitKey(1) == 27:
         break
