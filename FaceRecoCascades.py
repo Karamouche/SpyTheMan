@@ -20,7 +20,7 @@ def shoot(rec):
     face = cv2.CascadeClassifier('cascades/frontalface_alt.xml')
     mouth = cv2.CascadeClassifier('cascades/mouth2.xml')
     global hasShoot
-    APROX = 20
+    APROX = 20 #Valeur d'environ autour du centre de la cam
     grayRec = cv2.cvtColor(rec, cv2.COLOR_BGR2GRAY)
     center = (int(rec.shape[1]/2), int(rec.shape[0]/2))
     faces = face.detectMultiScale(grayRec, 1.1, 5, minSize=(30,30), flags=cv2.CASCADE_SCALE_IMAGE)
@@ -82,12 +82,12 @@ if not cam.isOpened():
     print("Error initializing camera")
 
 while cam.isOpened():
-    cv2.imshow("SpyTheMan", shoot(rec))
-    #shoot(rec)
-    succes, rec = cam.read()
     if hasShoot:
         time.sleep(1)
         hasShoot = False
+    cv2.imshow("SpyTheMan", shoot(rec))
+    #shoot(rec)
+    succes, rec = cam.read()
     rec = cv2.flip(rec, 1)
     if cv2.waitKey(1) == 27:
         break

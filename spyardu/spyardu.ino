@@ -9,7 +9,7 @@
 #define dep 2
 
 
-int poservoT = 0;
+int poservoT = 180;
 int poservoH = 90;
 int poservoV = 90;
 
@@ -39,10 +39,11 @@ void loop(){
 			digitalWrite(borneIN2, HIGH);
 			digitalWrite(borneIN3, LOW);
 			digitalWrite(borneIN4, HIGH);
-			delay(400); //On attend que les moteurs soit à  la bonne vitesse
-			ServT.write(-180); //On envoie la munition 180 = 
-      delay(250);
-      ServT.write(0);
+			delay(2000); //On attend que les moteurs soit à  la bonne vitesse
+			ServT.write(0); //On envoie la munition 180 = 
+      delay(1000);
+      ServT.write(180);
+      delay(2000);
       delay(600);
       poservoV = 90;
       poservoH = 90;
