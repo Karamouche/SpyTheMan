@@ -49,7 +49,6 @@ def shoot(rec):
         if(deplacement[0] < APROX and deplacement[0] > -APROX and
            deplacement[1] < APROX and deplacement[1] > -APROX):
             channel.write('1'.encode()) #shoot
-            time.sleep(0.3)
             hasShoot = True
         if(deplacement[0] > APROX):
             channel.write('4'.encode())
@@ -82,11 +81,10 @@ if not cam.isOpened():
     print("Error initializing camera")
 
 while cam.isOpened():
-    if hasShoot:
-        time.sleep(1)
-        hasShoot = False
     cv2.imshow("SpyTheMan", shoot(rec))
-    #shoot(rec)
+    if hasShoot:
+        time.sleep(7)
+        hasShoot = False
     succes, rec = cam.read()
     rec = cv2.flip(rec, 1)
     if cv2.waitKey(1) == 27:
