@@ -43,7 +43,6 @@ void loop(){
 			ServT.write(0); //On envoie la munition 180 = 
       delay(1000);
       ServT.write(180);
-      delay(2000);
       delay(600);
       poservoV = 90;
       poservoH = 90;
